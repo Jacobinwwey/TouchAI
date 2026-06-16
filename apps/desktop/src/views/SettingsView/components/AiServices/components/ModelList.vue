@@ -402,7 +402,7 @@
                     {{ t('settings.ai.invalidRegex', { error: regexError }) }}
                 </span>
 
-                <!-- Multi-select toggle -->
+                <!-- Multi-select toggle (text button) -->
                 <button
                     class="rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors"
                     :class="[
@@ -419,7 +419,7 @@
                     }}
                 </button>
 
-                <!-- Batch delete button (only in multi-select mode with selections) -->
+                <!-- Batch delete button (text with count badge) -->
                 <button
                     v-if="multiSelectMode && selectedModelIds.size > 0"
                     class="flex-shrink-0 rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-sm font-medium text-red-600 transition-colors hover:bg-red-100"
@@ -431,34 +431,31 @@
                     </span>
                 </button>
 
-                <!-- Select all / deselect (only in multi-select mode) -->
+                <!-- Select all / deselect (icon button) -->
                 <button
                     v-if="multiSelectMode"
-                    class="flex-shrink-0 rounded-lg border border-neutral-200 bg-white px-3 py-1.5 text-sm font-medium text-neutral-600 transition-colors hover:border-neutral-300"
+                    class="settings-icon-button h-8 w-8"
+                    :title="isAllSelected ? t('settings.ai.selectNone') : t('settings.ai.selectAll')"
                     @click="toggleSelectAll"
                 >
-                    {{ isAllSelected ? t('settings.ai.selectNone') : t('settings.ai.selectAll') }}
+                    <AppIcon :name="isAllSelected ? 'x' : 'check'" class="h-4 w-4" />
                 </button>
 
+                <!-- Refresh button (icon button) -->
                 <button
                     v-if="!multiSelectMode"
-                    class="flex-shrink-0 rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors"
+                    class="settings-icon-button h-8 w-8"
                     :class="{
-                        'border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300 hover:text-neutral-900':
-                            !refreshing,
-                        'cursor-not-allowed border-neutral-200 bg-neutral-50 text-neutral-400':
-                            refreshing,
+                        'cursor-not-allowed opacity-50': refreshing,
                     }"
                     :disabled="refreshing"
                     :title="t('settings.ai.refreshModelsTitle')"
                     @click="handleRefresh"
                 >
-                    <span v-if="refreshing" class="inline-flex items-center gap-1.5">
-                        <AppIcon name="refresh" class="h-4 w-4 animate-spin" />
-                        {{ t('settings.ai.refreshing') }}
-                    </span>
-                    <span v-else>{{ t('settings.ai.refresh') }}</span>
+                    <AppIcon name="refresh" class="h-4 w-4" :class="{ 'animate-spin': refreshing }" />
                 </button>
+
+                <!-- Add model button (text button) -->
                 <button
                     v-if="!multiSelectMode"
                     class="settings-button-primary flex-shrink-0 px-3 py-1.5"
